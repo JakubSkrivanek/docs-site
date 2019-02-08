@@ -505,6 +505,17 @@ By default, Zowe uses the runtime version that you most recently installed. To s
 /S ZOWESVR,SRVRPATH='$ZOWE_ROOT_DIR'
 ```
 
+When `ZOWESVR` procedure fails with `RC=0256` and `STDERR` contains:
+```
+.../scripts/internal/run-zowe.sh 1: FSUM7332 syntax error: got (, expecting Newline
+```
+BPX automatic code page conversion is not enabled. To enable auto conversion in `ZOWESVR` proc add the following into the `ZOWESTEP`:
+```
+//STDENV   DD *   
+_BPXK_AUTOCVT=ON  
+/*
+```
+
 To test whether the API Mediation Layer is active, open the URL: `https://<hostname>:7554`. 
 
 The port number 7554 is the default API Gateway port. You can overwrite this port in the `zowe-install.yaml` file before the `zowe-install.sh` script is run. See Step 2 in [Installing the Zowe runtime on z/OS](#installing-the-zowe-runtime-on-zos).
@@ -679,7 +690,7 @@ The manual installation consists of the following steps.
         ```
         - If you use CA Top Secret, issue the following commands:
         ```
-        TSS ADDTO(owner-acid) RESCLASS(CSFSERV)                                                      
+        TSS ADDTO(owner-acid) RESCLASS(CSFSERV)                                                       [WIP TODO - DO WE NEED THIS LINE?]
         TSS ADD(owner-acid) CSFSERV(profile-prefix.)
         TSS PERMIT(tcpip-stackname) CSFSERV(profile-prefix.profile-suffix) ACCESS(READ)
         TSS PERMIT(user-acid) CSFSERV(profile-prefix.profile-suffix) ACCESS(READ)                               ... [repeat for user-acids IKED, NSSD, and Policy Agent]
